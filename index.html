@@ -7,7 +7,7 @@
 </head>
 <body class="bg-light">
   <div class="container py-5">
-    <h2 class="mb-4 text-center">📦 제품 재고 리스트</h2>
+    <h2 class="mb-4 text-center">📦 Allstar / Uhlmann 제품 재고 리스트</h2>
     <div id="productList" class="row gy-4"></div>
   </div>
 
@@ -16,20 +16,27 @@
     .then(res => res.json())
     .then(data => {
       const rows = data.values;
-      showData(rows);  // ✅ 함수는 호출만!
+      showData(rows);
     });
+
+  function getDeliveryClass(delivery) {
+  if (delivery.includes("3주 내 수령") return "bg-success text-white";
+  if (delivery.includes("재고 없음 - 5주 이상") return "bg-danger text-white";
+  return "bg-light"; // 기본
+}
+   
   
   function showData(rows) {
   const list = document.getElementById("productList");
   const grouped = {};
 
-  // 1. 3단계 그룹화: 브랜드+제품명 → 성별 → 배열
+  // Grouped by brand-product, gender, others
   rows.forEach(row => {
     const brand = row[0] || "";
     const product_name = row[1] || "";
     const gender = row[3] || "";
-    const hand = row[4] || "";
-    const size = row[5] || "";
+    const hand = row[5] || "";
+    const size = row[4] || "";
     const delivery = row[7] || "";
 
     const key = `${brand}||${product_name}`;
@@ -39,21 +46,24 @@
     grouped[key][gender].push({ hand, size, delivery });
   });
 
-  // 2. 상위 그룹 카드 (브랜드 + 제품명)
+  // Making top group cards
   Object.entries(grouped).forEach(([key, genderMap]) => {
     const [brand, product_name] = key.split("||");
     const col = document.createElement("div");
     col.className = "col-md-6";
 
-    // 3. 성별별 하위 항목
+    // Showing bottom level cards
     let genderHtml = Object.entries(genderMap).map(([gender, items]) => {
-      const itemListHtml = items.map(item => `
-        <div class="border rounded p-2 mb-2 bg-light">
+      const itemListHtml = items.map(item => {
+      const deliveryClass = getDeliveryClass(item.delivery);  // Checking delivery status
+      return `
+        <div class="border rounded p-2 mb-2 ${deliveryClass}">
           <strong>손:</strong> ${item.hand} /
           <strong>사이즈:</strong> ${item.size} /
           <strong>배송:</strong> ${item.delivery}
         </div>
-      `).join("");
+      `;
+    }).join("");
 
       return `
         <div class="mb-3">
