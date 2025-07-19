@@ -18,31 +18,48 @@
       const rows = data.values;
       showData(rows);  // ✅ 함수는 호출만!
     });
-
-  // ✅ 함수는 fetch 바깥에 정의
+  
   function showData(rows) {
     const list = document.getElementById("productList");
+    const grouped = {};
+  
+    // 1. 그룹화: 브랜드 + 제품명 기준
     rows.forEach(row => {
       const brand = row[0] || "";
       const product_name = row[1] || "";
-      const gender = row[3] || "";
-      const hand = row[4] || "";
-      const size = row[5] || "";
-      const delivery_schedule = row[7] || ""; // H열이면 range가 A2:H 여야 함
-
+      const key = `${brand}||${product_name}`;
+  
+      if (!grouped[key]) grouped[key] = [];
+      grouped[key].push({
+        gender: row[3] || "",
+        hand: row[4] || "",
+        size: row[5] || "",
+        delivery: row[7] || ""
+      });
+    });
+  
+    // 2. 그룹별 카드 생성
+    Object.entries(grouped).forEach(([key, items]) => {
+      const [brand, product_name] = key.split("||");
+  
       const col = document.createElement("div");
-      col.className = "col-md-4";
+      col.className = "col-md-6";
+  
+      let itemListHtml = items.map(item => `
+        <div class="border rounded p-2 mb-2 bg-white">
+          <strong>성별:</strong> ${item.gender} /
+          <strong>손:</strong> ${item.hand} /
+          <strong>사이즈:</strong> ${item.size} /
+          <strong>배송:</strong> ${item.delivery}
+        </div>
+      `).join("");
+  
       col.innerHTML = `
-        <div class="card shadow-sm">
+        <div class="card shadow">
           <div class="card-body">
-            <h3 class="card-brand">${brand}</h3>
-            <h5 class="card-product">${product_name}</h5>
-            <p class="card-text">
-              <strong>성별:</strong> ${gender}<br>
-              <strong>손:</strong> ${hand}<br>
-              <strong>사이즈:</strong> ${size}<br>
-              <strong>배송:</strong> ${delivery_schedule}
-            </p>
+            <h4 class="card-title">${brand}</h4>
+            <h5 class="card-subtitle mb-3 text-muted">${product_name}</h5>
+            ${itemListHtml}
           </div>
         </div>
       `;
