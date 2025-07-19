@@ -12,32 +12,29 @@
   </div>
 
  <script>
-  fetch("https://spreadsheets.google.com/feeds/list/1tmUnbXHENlO6TYXN1bmzCDRhtG1d2qENfgDQk7KdX9s/1/public/values?alt=json")
+  const SHEET_ID = '1tmUnbXHENlO6TYXN1bmzCDRhtG1d2qENfgDQk7KdX9s';
+  const API_KEY = 'AIzaSyC52sQfFOGmsioirGXjjqETohsEbEkC8Tk'; // 발급한 키로 교체
+  const RANGE = 'Allstar!A2:F';
+
+  fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`)
     .then(res => res.json())
     .then(data => {
+      const rows = data.values;
       const list = document.getElementById("productList");
-      const entries = data.feed.entry;
 
-      entries.forEach(entry => {
-        const brand = entry['gsx$브랜드']?.$t || "";
-        const item = entry['gsx$품목명']?.$t || "";
-        const gender = entry['gsx$성별']?.$t || "";
-        const hand = entry['gsx$손']?.$t || "";
-        const size = entry['gsx$사이즈']?.$t || "";
-        const delivery = entry['gsx$예상배송기간']?.$t || "";
-
+      rows.forEach(row => {
+        const [브랜드, 품목명, 성별, 손, 사이즈, 예상배송기간] = row;
         const col = document.createElement("div");
         col.className = "col-md-4";
-
         col.innerHTML = `
           <div class="card shadow-sm">
             <div class="card-body">
-              <h5 class="card-title">${brand} - ${item}</h5>
+              <h5 class="card-title">${브랜드} - ${품목명}</h5>
               <p class="card-text">
-                <strong>성별:</strong> ${gender}<br>
-                <strong>손:</strong> ${hand}<br>
-                <strong>사이즈:</strong> ${size}<br>
-                <strong>배송:</strong> ${delivery}
+                <strong>성별:</strong> ${성별}<br>
+                <strong>손:</strong> ${손}<br>
+                <strong>사이즈:</strong> ${사이즈}<br>
+                <strong>배송:</strong> ${예상배송기간}
               </p>
             </div>
           </div>
@@ -46,6 +43,7 @@
       });
     });
 </script>
+
 
 </body>
 </html>
