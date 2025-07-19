@@ -15,8 +15,6 @@ exports.handler = async function (event, context) {
     // 병렬 처리
   const results = await Promise.all(requests);
   
-  console.log("Google API 응답:", JSON.stringify(results, null, 2)); // 👈 이 줄 추가
-  
   const combinedRows = results.flatMap(result => result.values || []);
 
 
