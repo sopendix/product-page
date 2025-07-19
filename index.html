@@ -12,7 +12,7 @@
   </div>
 
  <script>
-  fetch('/.netlify/functions/sheet')
+  fetch('https://fencingstocks.netlify.app/.netlify/functions/sheet')
     .then(res => res.json())
     .then(data => {
       const rows = data.values;
