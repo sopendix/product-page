@@ -17,7 +17,7 @@
   </div>
 
  <script>
-
+  // -- set card styles --
   // Set bg color by delivery status
   function getDeliveryClass(delivery) {
     if (delivery.includes("3주 내 수령")) return "bg-custom-fast text-white";
@@ -31,6 +31,7 @@
     if (gender.includes("여성")) return "👩";
   } 
 
+  // -- end of setting card styles --
 
    
   fetch('https://fencingstocks.netlify.app/.netlify/functions/sheet')
