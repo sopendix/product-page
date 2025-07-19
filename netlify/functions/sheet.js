@@ -23,7 +23,10 @@ exports.handler = async function (event, context) {
 
   return {
     statusCode: 200,
-    headers: { 'Access-Control-Allow-Origin': '*' },
+    headers: { 
+      'Access-Control-Allow-Origin': 'https://sopendix.github.io',
+      'Access-Control-Allow-Headers': 'Content-Type'
+     },
     body: JSON.stringify({ values: combinedRows })
   };
 };
