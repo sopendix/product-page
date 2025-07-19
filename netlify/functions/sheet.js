@@ -11,11 +11,13 @@ exports.handler = async function (event, context) {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
     return fetch(url).then(res => res.json());
   });
+
+    // 병렬 처리
+  const results = await Promise.all(requests);
   
   const combinedRows = results.flatMap(result => result.values || []);
 
-  // 병렬 처리
-  const results = await Promise.all(requests);
+
   console.log("Google API 응답:", JSON.stringify(results, null, 2)); // 👈 이 줄 추가
 
   return {
