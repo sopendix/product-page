@@ -7,7 +7,7 @@
 </head>
 <body class="bg-light">
   <div class="container py-5">
-    <h2 class="mb-4 text-center">상품 재고 및 예상 배송 기간</h2>
+    <h2 class="mb-4 text-center">📦 제품 재고 리스트</h2>
     <div id="productList" class="row gy-4"></div>
   </div>
 
@@ -42,7 +42,8 @@
       col.innerHTML = `
         <div class="card shadow-sm">
           <div class="card-body">
-            <h5 class="card-title">${brand} - ${product_name}</h5>
+            <h3 class = card-brand> ${brand}</h3>
+            <h5 class="card-product">${product_name}</h5>
             <p class="card-text">
               <strong>성별:</strong> ${gender}<br>
               <strong>손:</strong> ${hand}<br>
