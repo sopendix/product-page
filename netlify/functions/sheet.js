@@ -25,6 +25,7 @@ exports.handler = async function (event, context) {
   const headers = { 
       'Access-Control-Allow-Headers': 'Content-Type',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Vary': 'Origin',
    };
 
   if (allowedOrigins.includes(origin)) {
