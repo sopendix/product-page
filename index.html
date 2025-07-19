@@ -14,34 +14,47 @@
  <script>
   const SHEET_ID = '1tmUnbXHENlO6TYXN1bmzCDRhtG1d2qENfgDQk7KdX9s';
   const API_KEY = 'AIzaSyC52sQfFOGmsioirGXjjqETohsEbEkC8Tk'; // 발급한 키로 교체
-  const RANGE = 'Allstar!A2:F';
+  const RANGE1 = 'Allstar!A2:G';
 
-  fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`)
+  fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE1}?key=${API_KEY}`)
     .then(res => res.json())
-    .then(data => {
-      const rows = data.values;
-      const list = document.getElementById("productList");
+    .then(data => showData(data.values));
 
-      rows.forEach(row => {
-        const [브랜드, 품목명, 성별, 손, 사이즈, 예상배송기간] = row;
-        const col = document.createElement("div");
-        col.className = "col-md-4";
-        col.innerHTML = `
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">${브랜드} - ${품목명}</h5>
-              <p class="card-text">
-                <strong>성별:</strong> ${성별}<br>
-                <strong>손:</strong> ${손}<br>
-                <strong>사이즈:</strong> ${사이즈}<br>
-                <strong>배송:</strong> ${예상배송기간}
-              </p>
-            </div>
+  const RANGE2 = 'Uhlmann!A2:F';
+  fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE2}?key=${API_KEY}`)
+    .then(res => res.json())
+    .then(data => showData(data.values));
+
+  function showData(rows) {
+    const list = document.getElementById("productList")
+  
+    rows.forEach(row => {
+
+      const brand = row[0] || "";
+      const product_name = row[1] || "";
+      const gender = row[3] || "";
+      const hand = row[4] || "";
+      const size = row[5] || "";
+      const delivery_schedule = row[7] || "";
+
+      const col = document.createElement("div");
+      col.className = "col-md-4";
+      col.innerHTML = `
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">${brand} - ${product_name}</h5>
+            <p class="card-text">
+              <strong>성별:</strong> ${gender}<br>
+              <strong>손:</strong> ${hand}<br>
+              <strong>사이즈:</strong> ${size}<br>
+              <strong>배송:</strong> ${delivery_schedule}
+            </p>
           </div>
-        `;
-        list.appendChild(col);
-      });
+        </div>
+      `;
+      list.appendChild(col);
     });
+  }
 </script>
 
 
