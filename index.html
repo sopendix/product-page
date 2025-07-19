@@ -18,13 +18,18 @@
       const rows = data.values;
       showData(rows);
     });
-
+  // Set bg color by delivery status
   function getDeliveryClass(delivery) {
-  if (delivery.includes("3주 내 수령") return "bg-success text-white";
-  if (delivery.includes("재고 없음 - 5주 이상") return "bg-danger text-white";
-  return "bg-light"; // 기본
-}
+    if (delivery.includes("3주 내 수령") return "bg-success text-white";
+    if (delivery.includes("재고 없음 - 5주 이상") return "bg-danger text-white";
+    return "bg-light"; // 기본
+  }
    
+  // set emoji by gender
+  function getGenderEmoji(gender) {
+    if (gender.includes("남성")) return "👨";
+    if (gender.includes("여성")) return "👩";
+  } 
   
   function showData(rows) {
   const list = document.getElementById("productList");
@@ -54,6 +59,7 @@
 
     // Showing bottom level cards
     let genderHtml = Object.entries(genderMap).map(([gender, items]) => {
+      const emoji = getGenderEmoji(gender);
       const itemListHtml = items.map(item => {
       const deliveryClass = getDeliveryClass(item.delivery);  // Checking delivery status
       return `
@@ -67,7 +73,7 @@
 
       return `
         <div class="mb-3">
-          <h6 class="text-primary">👤 성별: ${gender}</h6>
+          <h6 class="text-primary">${emoji} ${gender}</h6>
           ${itemListHtml}
         </div>
       `;
