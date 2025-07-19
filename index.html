@@ -17,6 +17,22 @@
   </div>
 
  <script>
+
+  // Set bg color by delivery status
+  function getDeliveryClass(delivery) {
+    if (delivery.includes("3주 내 수령")) return "bg-custom-fast text-white";
+    if (delivery.includes("재고 없음 - 5주 이상")) return "bg-custom-delayed text-white";
+    return "bg-light"; // 기본
+  }
+   
+  // set emoji by gender
+  function getGenderEmoji(gender) {
+    if (gender.includes("남성")) return "👨";
+    if (gender.includes("여성")) return "👩";
+  } 
+
+
+   
   fetch('https://fencingstocks.netlify.app/.netlify/functions/sheet')
     .then(res => res.json())
     .then(data => {
@@ -44,20 +60,6 @@
 
     grouped[key][gender].push({ hand, size, delivery });
   });
-
-
-    // Set bg color by delivery status
-  function getDeliveryClass(delivery) {
-    if delivery.includes("3주 내 수령") return "bg-custom-fast text-white";
-    if delivery.includes("재고 없음 - 5주 이상") return "bg-custom-delayed text-white";
-    return "bg-light"; // 기본
-  }
-   
-  // set emoji by gender
-  function getGenderEmoji(gender) {
-    if (gender.includes("남성")) return "👨";
-    if (gender.includes("여성")) return "👩";
-  } 
 
   // Making top group cards
   Object.entries(grouped).forEach(([key, genderMap]) => {
