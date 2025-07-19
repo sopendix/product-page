@@ -8,6 +8,10 @@
     .bg-custom-fast { background-color: #2dbb71; color: white; }
     .bg-custom-delayed { background-color: #df4b59; color: white; }
     .bg-custom-pending { background-color: #ffc107; color: black; }
+
+    .custom-h6 {
+      color: #202428;
+      font-weight: 700;
   </style>
 </head>
 <body class="bg-light">
@@ -84,7 +88,7 @@
 
       return `
         <div class="mb-3">
-          <h6 class="text-primary" style="color: #000000; font-weight: bold">${emoji} ${gender}</h6>
+          <h6 class="custom-h6">${emoji} ${gender}</h6>
           ${itemListHtml}
         </div>
       `;
