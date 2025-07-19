@@ -13,29 +13,29 @@
 
  <script>
   fetch('/.netlify/functions/sheet')
-   .then(res => res.json())
+    .then(res => res.json())
     .then(data => {
       const rows = data.values;
-      showData(rows);
+      showData(rows);  // ✅ 함수는 호출만!
+    });
 
+  // ✅ 함수는 fetch 바깥에 정의
   function showData(rows) {
-    const list = document.getElementById("productList")
-  
+    const list = document.getElementById("productList");
     rows.forEach(row => {
-
       const brand = row[0] || "";
       const product_name = row[1] || "";
       const gender = row[3] || "";
       const hand = row[4] || "";
       const size = row[5] || "";
-      const delivery_schedule = row[7] || "";
+      const delivery_schedule = row[7] || ""; // H열이면 range가 A2:H 여야 함
 
       const col = document.createElement("div");
       col.className = "col-md-4";
       col.innerHTML = `
         <div class="card shadow-sm">
           <div class="card-body">
-            <h3 class ="card-brand"> ${brand}</h3>
+            <h3 class="card-brand">${brand}</h3>
             <h5 class="card-product">${product_name}</h5>
             <p class="card-text">
               <strong>성별:</strong> ${gender}<br>
