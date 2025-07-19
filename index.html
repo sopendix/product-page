@@ -7,37 +7,39 @@
 </head>
 <body class="bg-light">
   <div class="container py-5">
-    <h2 class="mb-4 text-center">🛍️ 제품 가격 및 재고</h2>
+    <h2 class="mb-4 text-center">📦 제품 재고 리스트</h2>
     <div id="productList" class="row gy-4"></div>
   </div>
 
   <script>
-    fetch("https://spreadsheets.google.com/feeds/list/1tmUnbXHENlO6TYXN1bmzCDRhtG1d2qENfgDQk7KdX9s/edit?gid/1/public/values?alt=json")
+    // 구글 스프레드시트 JSON 주소 (문서 ID 교체 필요)
+    fetch("https://spreadsheets.google.com/feeds/list/1tmUnbXHENlO6TYXN1bmzCDRhtG1d2qENfgDQk7KdX9s/1/public/values?alt=json")
       .then(res => res.json())
       .then(data => {
         const list = document.getElementById("productList");
         const entries = data.feed.entry;
 
         entries.forEach(entry => {
-          const name = entry['gsx$제품명'].$t;
-          const price = entry['gsx$가격'].$t;
+          const brand = entry['gsx$브랜드']?.$t || "";
+          const item = entry['gsx$품목명']?.$t || "";
+          const gender = entry['gsx$성별']?.$t || "";
+          const hand = entry['gsx$손']?.$t || "";
+          const size = entry['gsx$사이즈']?.$t || "";
+          const delivery = entry['gsx$예상배송기간']?.$t || "";
 
-          let sizeStock = '';
-          ['s','m','l','xl'].forEach(size => {
-            const count = entry[`gsx$${size}`]?.$t || "0";
-            const badge = count > 0 ? 'bg-success' : 'bg-secondary';
-            sizeStock += `<span class="badge ${badge} me-1">${size.toUpperCase()}: ${count}개</span>`;
-          });
+          const col = document.createElement("div");
+          col.className = "col-md-4";
 
-          const col = document.createElement('div');
-          col.className = 'col-md-4';
           col.innerHTML = `
             <div class="card shadow-sm">
               <div class="card-body">
-                <h5 class="card-title">${name}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">₩${price}</h6>
-                <p class="card-text">사이즈별 재고:</p>
-                ${sizeStock}
+                <h5 class="card-title">${brand} - ${item}</h5>
+                <p class="card-text">
+                  <strong>성별:</strong> ${gender}<br>
+                  <strong>손:</strong> ${hand}<br>
+                  <strong>사이즈:</strong> ${size}<br>
+                  <strong>배송:</strong> ${delivery}
+                </p>
               </div>
             </div>
           `;
