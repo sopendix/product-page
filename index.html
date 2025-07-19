@@ -71,7 +71,6 @@
   Object.entries(grouped).forEach(([key, genderMap]) => {
     const [brand, product_name] = key.split("||");
     const col = document.createElement("div");
-    col.className = "col-12 col-sm-6 col-lg-4";
 
     // Showing bottom level cards
     let genderHtml = Object.entries(genderMap).map(([gender, items]) => {
