@@ -20,52 +20,62 @@
     });
   
   function showData(rows) {
-    const list = document.getElementById("productList");
-    const grouped = {};
-  
-    // 1. 그룹화: 브랜드 + 제품명 기준
-    rows.forEach(row => {
-      const brand = row[0] || "";
-      const product_name = row[1] || "";
-      const key = `${brand}||${product_name}`;
-  
-      if (!grouped[key]) grouped[key] = [];
-      grouped[key].push({
-        gender: row[3] || "",
-        hand: row[4] || "",
-        size: row[5] || "",
-        delivery: row[7] || ""
-      });
-    });
-  
-    // 2. 그룹별 카드 생성
-    Object.entries(grouped).forEach(([key, items]) => {
-      const [brand, product_name] = key.split("||");
-  
-      const col = document.createElement("div");
-      col.className = "col-md-6";
-  
-      let itemListHtml = items.map(item => `
-        <div class="border rounded p-2 mb-2 bg-white">
-          <strong>성별:</strong> ${item.gender} /
+  const list = document.getElementById("productList");
+  const grouped = {};
+
+  // 1. 3단계 그룹화: 브랜드+제품명 → 성별 → 배열
+  rows.forEach(row => {
+    const brand = row[0] || "";
+    const product_name = row[1] || "";
+    const gender = row[3] || "";
+    const hand = row[4] || "";
+    const size = row[5] || "";
+    const delivery = row[7] || "";
+
+    const key = `${brand}||${product_name}`;
+    if (!grouped[key]) grouped[key] = {};
+    if (!grouped[key][gender]) grouped[key][gender] = [];
+
+    grouped[key][gender].push({ hand, size, delivery });
+  });
+
+  // 2. 상위 그룹 카드 (브랜드 + 제품명)
+  Object.entries(grouped).forEach(([key, genderMap]) => {
+    const [brand, product_name] = key.split("||");
+    const col = document.createElement("div");
+    col.className = "col-md-6";
+
+    // 3. 성별별 하위 항목
+    let genderHtml = Object.entries(genderMap).map(([gender, items]) => {
+      const itemListHtml = items.map(item => `
+        <div class="border rounded p-2 mb-2 bg-light">
           <strong>손:</strong> ${item.hand} /
           <strong>사이즈:</strong> ${item.size} /
           <strong>배송:</strong> ${item.delivery}
         </div>
       `).join("");
-  
-      col.innerHTML = `
-        <div class="card shadow">
-          <div class="card-body">
-            <h4 class="card-title">${brand}</h4>
-            <h5 class="card-subtitle mb-3 text-muted">${product_name}</h5>
-            ${itemListHtml}
-          </div>
+
+      return `
+        <div class="mb-3">
+          <h6 class="text-primary">👤 성별: ${gender}</h6>
+          ${itemListHtml}
         </div>
       `;
-      list.appendChild(col);
-    });
-  }
+    }).join("");
+
+    col.innerHTML = `
+      <div class="card shadow">
+        <div class="card-body">
+          <h4 class="card-title">${brand}</h4>
+          <h5 class="card-subtitle mb-3 text-muted">${product_name}</h5>
+          ${genderHtml}
+        </div>
+      </div>
+    `;
+    list.appendChild(col);
+  });
+}
+
  </script>
 
 
